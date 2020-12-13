@@ -79,18 +79,22 @@ private:
 
 public:
 
-	int RoomNumbers = 10;
-	int FloorNumbers = 5;
+	int RoomNumbers;
+	int FloorNumbers;
 	Room Kitchen;
-	
 	Room* rooms = new Room[RoomNumbers];
 
+	House(int RoomNumbers, int FloorNumbers)
+	{
+		this->RoomNumbers = RoomNumbers;
+		this->FloorNumbers = FloorNumbers;
+	}
 
 	~House()
 	{
 		delete[] rooms;
 	}
-
+	
 
 };
 
