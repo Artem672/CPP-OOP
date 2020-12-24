@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <Windows.h>
+#include <conio.h>
 
 using namespace std;
 
@@ -135,6 +136,13 @@ public:
 	TeamMaker TeamBlue[3];
 	//TeamMaker TM;
 
+	void PressTheButton()
+	{
+		cout << "Press any button to continue!" << endl;
+		while (!_kbhit());
+		if (_getch() == 81);
+		system("cls");
+	}
 
 	void GenerateTeam()
 	{
@@ -154,7 +162,7 @@ public:
 
 	void RedAttack(int MissChanceRed, int ChooseRed, int ChooseBlue)
 	{
-		cout << "------------------Team Red choice------------------" << endl;
+		cout << "	Team Red choice" << endl;
 		if (TeamRed[ChooseRed].Alive == true)
 		{
 			
@@ -168,7 +176,7 @@ public:
 				cout << "Hero: " << TeamRed[ChooseRed].Name << " damaged : " << TeamBlue[ChooseBlue].Name << " .Total damage: " << TeamRed[ChooseRed].Damage << ", rest health: " << TeamBlue[ChooseBlue].HealthPoint << endl;
 				if (TeamBlue[ChooseBlue].HealthPoint <= 0)
 				{
-					cout << "Hero: " << TeamBlue[ChooseBlue].Name << " died!" << endl;
+					cout << "Hero: " << TeamBlue[ChooseBlue].Name << " can't make a choice. He is dead!" << endl;
 					TeamBlue[ChooseBlue].Alive = false;
 				}
 			}
@@ -176,14 +184,13 @@ public:
 		}
 		else
 		{
-			cout << TeamRed[ChooseRed].Name<< " is dead!" << endl;
+			cout << TeamRed[ChooseRed].Name << " can't make a choice. He is dead!" << endl << endl;
 		}
-		cout << "---------------------------------------------------" << endl;
 	}
 
 	void BlueAttack(int MissChanceBlue, int ChooseBlue, int ChooseRed)
 	{	
-		cout << "------------------Team Blue choice------------------" << endl;
+		cout << "	Team Blue choice" << endl;
 		if (TeamBlue[ChooseBlue].Alive == true)
 		{
 			if (MissChanceBlue <= TeamBlue[ChooseBlue].MissChance)
@@ -196,7 +203,7 @@ public:
 				cout << "Hero: " << TeamBlue[ChooseBlue].Name << " damaged : " << TeamRed[ChooseRed].Name << " .Total damage: " << TeamBlue[ChooseBlue].Damage << ", rest health: " << TeamRed[ChooseRed].HealthPoint << endl;
 				if (TeamRed[ChooseRed].HealthPoint <= 0)
 				{
-					cout << "Hero: " << TeamRed[ChooseRed].Name << " died!" << endl;
+					cout << "Hero: " << TeamRed[ChooseRed].Name << " can't make a choice. He is dead!" << endl;
 					TeamRed[ChooseRed].Alive = false;
 				}
 			}
@@ -204,9 +211,8 @@ public:
 		}
 		else
 		{
-			cout << TeamBlue[ChooseBlue].Name << " is dead!" << endl;
+			cout << TeamBlue[ChooseBlue].Name << " can't make a choice. He is dead!" << endl << endl;
 		}
-		cout << "---------------------------------------------------" << endl;
 	}
 
 	void GameSession()
@@ -226,7 +232,7 @@ public:
 					if (TeamBlue[ChooseBlue].Alive == true && TeamRed[ChooseRed].Alive == true)
 					{
 						SuccesfullyChosen = true;
-						cout << "--------------Fight--------------------------------" << endl;
+						cout << "Fight" << endl;
 						cout << "Heroes are chosen for a fight!" << endl;
 					}
 				} while (SuccesfullyChosen != true);
@@ -234,6 +240,7 @@ public:
 				//Fight process
 				int MissChanceRed = rand() % 100 + 1, MissChanceBlue = rand() % 100 + 1, TeamStarter = rand() % 2;
 				/*
+				* 
 				if (TeamStarter == 0)//First attack by Red Team
 				{
 					RedAttack(MissChanceRed, ChooseRed, ChooseBlue);
@@ -246,24 +253,39 @@ public:
 					cout << endl;
 					RedAttack(MissChanceRed, ChooseRed, ChooseBlue);
 				}*/
+
+
 				RedAttack(MissChanceRed, ChooseRed, ChooseBlue);
 				cout << endl;
 				BlueAttack(MissChanceBlue, ChooseBlue, ChooseRed);
 				//-------------
+
+
 				if (TeamRed[0].Alive == false && TeamRed[1].Alive == false && TeamRed[2].Alive == false)
 				{
 					cout << "Team Blue wins!" << endl;
-					RedWon = true;
+					BlueWon = true;
+					this->PressTheButton();
+					system("cls");
 					break;
 				}
-				else if (TeamBlue[0].Alive == false && TeamBlue[1].Alive == false && TeamRed[2].Alive == false)
+				if (TeamBlue[0].Alive == false && TeamBlue[1].Alive == false && TeamRed[2].Alive == false)
 				{
 					cout << "Team Red wins!" << endl;
-					BlueWon = true;
+					RedWon = true;
+					this->PressTheButton();
+					system("cls");
 					break;
 				}
 				cout << endl << endl;
-				//system("PAUSE");
+				/*
+				this->OutputTeamBlue();
+				cout << endl;
+				this->OutputTeamRed();
+				*/
+				this->PressTheButton();
+
+
 			}
 		}
 		else
@@ -306,16 +328,19 @@ int main()
 		}
 		case 1:
 		{
+			system("cls");
 			BM.OutputTeamRed();
 			break;
 		}
 		case 2:
 		{
+			system("cls");
 			BM.OutputTeamBlue();
 			break;
 		}
 		case 3:
 		{
+			system("cls");
 			BM.GameSession();
 			break;
 		}
