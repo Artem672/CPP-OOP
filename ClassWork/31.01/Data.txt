@@ -1,0 +1,5 @@
+am Washington
+bg Belgium
+eg Egypt
+fr Paris
+uk London
