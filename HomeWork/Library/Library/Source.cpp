@@ -2,6 +2,8 @@
 #include <list>
 #include <algorithm>
 #include <string>
+#include <set>
+#include <string>
 using namespace std;
 class Book
 {
@@ -60,14 +62,18 @@ public:
 		return this->Number;
 	}
 	
+	void EditInfo(string Author, string BookName, int Year)
+	{
+		this->Author = Author;
+		this->BookName = BookName;
+		this->Year = Year;
+	}
+
 };
 class Library
 {
 public:
-	void SortList(list<Book>& book)
-	{
-		//sort(book.begin()->GetAuthor(), book.end()->GetAuthor(), [](string a, string b) {return a < b; });
-	}
+	
 	void AddBook(list<Book>& book)
 	{
 		string Author;
@@ -249,9 +255,17 @@ public:
 					f++;
 				}
 
-				f->SetPresent(true);
-				system("cls");
-				cout << "The book was handed out!" << endl;
+				if (f->GetPresent() == false)
+				{
+					f->SetPresent(true);
+					system("cls");
+					cout << "The book was handed out!" << endl;
+				}
+				else
+				{
+					system("cls");
+					cout << "Invalid code!" << endl;
+				}
 			}
 			catch (const std::exception& ex) {
 				cout << ex.what() << endl;
@@ -264,7 +278,103 @@ public:
 		}
 		
 	}
+
+	void DeleteBook(list<Book>& book)
+	{
+		if (!book.empty())
+		{
+			cout << "Books: " << endl;
+			for (auto f = book.begin(); f != book.end() ; f++)
+			{
+				f->ShowBooks();
+			}
+
+			int Number;
+			cout << endl << "Enter book number to delete-> ";
+			cin >> Number;
+
+			if (Number >= 0 && Number < book.size())
+			{
+				auto i = book.begin();
+				for (int i = 0; i < Number; i++)
+				{
+					i++;
+				}
+				book.erase(i);
+
+				system("cls");
+				cout << "Book was deleted!" << endl;
+			}
+			else
+			{
+				system("cls");
+				cout << "Invalid code!" << endl;
+			}
+
+		}
+		else
+		{
+			cout << "List is empty!" << endl;
+		}
+	}
+
+	void EditBook(list<Book>& book)
+	{
+		if (!book.empty())
+		{
+			cout << "Books: " << endl;
+			for (auto f = book.begin(); f != book.end(); f++)
+			{
+				f->ShowBooks();
+			}
+
+			int Number;
+			cout << endl << "Enter book number to edit-> ";
+			cin >> Number;
+
+			if (Number >= 0 && Number < book.size())
+			{
+				auto Ind = book.begin();
+				for (int i = 0; i < Number; i++)
+				{
+					Ind++;
+				}
+				
+				string Author, Name;
+				int Year;
+				system("cls");
+				cin.ignore();
+				cout << "Enter the new author of the book-> ";
+				getline(cin, Author);
+				cout << "Enter the new name of the book-> ";
+				getline(cin, Name);
+				cout << "Enter the new year of the book-> ";
+				cin >> Year;
+				Ind->EditInfo(Author, Name, Year);
+				system("cls");
+				cout << "Book was edited!" << endl;
+			}
+			else
+			{
+				system("cls");
+				cout << "Invalid code!" << endl;
+			}
+
+		}
+		else
+		{
+			cout << "List is empty!" << endl;
+		}
+	}
+
+	
+
 };
+
+bool operator < (Book& b1, Book& b2)
+{
+	return b1.GetAuthor() < b2.GetAuthor();
+}
 
 int main()
 {
@@ -272,6 +382,10 @@ int main()
 	Library L;
 	while (true)
 	{
+		if (!BookList.empty())
+		{
+			BookList.sort();
+		}
 		int choice;
 		cout << "0. Exit" << endl
 			<< "1. Add book" << endl
@@ -282,6 +396,7 @@ int main()
 			<< "6. Edit the book" << endl
 			<< "7. Find books by the author " << endl
 			<< "8. Get book out of rent" << endl
+			<< "9. Delete book" << endl
 			<< "Your choice-> ";
 		cin >> choice;
 		switch (choice)
@@ -317,7 +432,6 @@ int main()
 		{
 			system("cls");
 			cout << "The list: ";
-			//L.SortList(BookList);
 			L.ShowAllTheList(BookList);
 			system("pause");
 			system("cls");
@@ -334,7 +448,11 @@ int main()
 		}
 		case 6:
 		{
-			
+			system("cls");
+			L.EditBook(BookList);
+			system("pause");
+			system("cls");
+			break;
 		}
 		case 7:
 		{
@@ -348,6 +466,14 @@ int main()
 		{
 			system("cls");
 			L.GetBookOutRent(BookList);
+			system("pause");
+			system("cls");
+			break;
+		}
+		case 9:
+		{
+			system("cls");
+			L.DeleteBook(BookList);
 			system("pause");
 			system("cls");
 			break;
